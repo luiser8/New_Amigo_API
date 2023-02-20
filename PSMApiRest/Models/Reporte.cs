@@ -12,6 +12,7 @@ namespace PSMApiRest.Models
         public string Fullnombre { get; set; }
         public string Identificador { get; set; }
         public string Telefonos { get; set; }
+        public string Email { get; set; }
         public string Descripcion { get; set; }
         public string Cuota { get; set; }
         public decimal Dolar { get; set; }

@@ -41,6 +41,7 @@ namespace PSMApiRest.DAL
                         reporte.Fullnombre = Convert.ToString(dt.Rows[i]["Fullnombre"]);
                         reporte.Identificador = Convert.ToString(dt.Rows[i]["Identificador"]);
                         reporte.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
+                        reporte.Email = Convert.ToString(dt.Rows[i]["Email"]);
                         reporte.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);
                         reporte.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
                         reporte.Dolar = reporte.Cuota.Contains("SAIA") ? cuotaDAL.SingleCuota(1, Lapso) : cuotaDAL.SingleCuota(2, Lapso);
@@ -74,6 +75,7 @@ namespace PSMApiRest.DAL
                         reporte.Fullnombre = Convert.ToString(dt.Rows[i]["Fullnombre"]);
                         reporte.Identificador = Convert.ToString(dt.Rows[i]["Identificador"]);
                         reporte.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
+                        reporte.Email = Convert.ToString(dt.Rows[i]["Email"]);
                         reporte.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);
                         reporte.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
                         reporte.Dolar = reporte.Cuota.Contains("SAIA") ? cuotaDAL.SingleCuota(2, Lapso) : cuotaDAL.SingleCuota(1, Lapso);

@@ -33,10 +33,11 @@ namespace PSMApiRest.Controllers
         public HttpResponseMessage GetReporteDeudas([FromUri] string Lapso, byte Pagada)
         {
             DataTable dt = new DataTable("Cuentas");
-            dt.Columns.AddRange(new DataColumn[9] { new DataColumn("Lapso", typeof(string)),
+            dt.Columns.AddRange(new DataColumn[10] { new DataColumn("Lapso", typeof(string)),
                                             new DataColumn("Identificador", typeof(Int32)),
                                             new DataColumn("FullNombres", typeof(string)),
                                             new DataColumn("Telefonos", typeof(string)),
+                                            new DataColumn("Email", typeof(string)),
                                             new DataColumn("Descripcion", typeof(string)),
                                             new DataColumn("Cuota", typeof(string)),
                                             new DataColumn("Dolar", typeof(decimal)),
@@ -46,7 +47,7 @@ namespace PSMApiRest.Controllers
 
             foreach (var reporte in reporteDAL.GetReporteDeudas(Lapso, Pagada))
             {
-                dt.Rows.Add(reporte.Lapso, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Descripcion, reporte.Cuota, reporte.Dolar, reporte.Monto, reporte.Total);
+                dt.Rows.Add(reporte.Lapso, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Email, reporte.Descripcion, reporte.Cuota, reporte.Dolar, reporte.Monto, reporte.Total);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -85,11 +86,12 @@ namespace PSMApiRest.Controllers
         public HttpResponseMessage GetReportePagadas([FromUri] string Lapso)
         {
             DataTable dt = new DataTable("Pagadas");
-            dt.Columns.AddRange(new DataColumn[10] { new DataColumn("Lapso", typeof(string)),
+            dt.Columns.AddRange(new DataColumn[11] { new DataColumn("Lapso", typeof(string)),
                                             new DataColumn("IdFactura", typeof(long)),
                                             new DataColumn("Identificador", typeof(Int32)),
                                             new DataColumn("FullNombres", typeof(string)),
                                             new DataColumn("Telefonos", typeof(string)),
+                                            new DataColumn("Email", typeof(string)),
                                             new DataColumn("Descripcion", typeof(string)),
                                             new DataColumn("Cuota", typeof(string)),
                                             new DataColumn("Dolar", typeof(decimal)),
@@ -99,7 +101,7 @@ namespace PSMApiRest.Controllers
 
             foreach (var reporte in reporteDAL.GetReportePagadas(Lapso))
             {
-                dt.Rows.Add(reporte.Lapso, reporte.IdFactura, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Descripcion, reporte.Cuota, reporte.Dolar, reporte.Monto, reporte.Fecha);
+                dt.Rows.Add(reporte.Lapso, reporte.IdFactura, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Email, reporte.Descripcion, reporte.Cuota, reporte.Dolar, reporte.Monto, reporte.Fecha);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
