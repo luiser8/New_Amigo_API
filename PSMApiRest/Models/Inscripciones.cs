@@ -5,6 +5,7 @@ namespace PSMApiRest.Models
 {
     public class Inscripciones
     {
+        public int Id_Periodo { get; set; }
         public string Lapso { get; set; }
         public int Plan0 { get; set; }
         public int Plan1 { get; set; }
