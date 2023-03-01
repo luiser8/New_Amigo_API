@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using PSMApiRest.DAL;
-using PSMApiRest.Lib;
-using PSMApiRest.Models;
 
 namespace PSMApiRest.Controllers
 {

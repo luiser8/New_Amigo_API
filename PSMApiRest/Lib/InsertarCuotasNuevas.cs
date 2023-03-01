@@ -1,5 +1,4 @@
 ﻿using PSMApiRest.DAL;
-using System;
 using System.Collections.Generic;
 
 namespace PSMApiRest.Models
