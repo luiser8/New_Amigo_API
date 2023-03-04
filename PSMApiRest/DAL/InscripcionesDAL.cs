@@ -23,7 +23,6 @@ namespace PSMApiRest.DAL
         {
             Parametros.Clear();
             Parametros.Add("@Id_Periodo", inscripcionesRequest.Id_Periodo);
-            /*Parametros.Add("@Lapso", inscripcionesRequest.Lapso);
             Parametros.Add("@Plan0", inscripcionesRequest.Plan0 != null ? inscripcionesRequest.Plan0 : 0);
             Parametros.Add("@Plan1", inscripcionesRequest.Plan1 != null ? inscripcionesRequest.Plan1 : 0);
             Parametros.Add("@Plan2", inscripcionesRequest.Plan2 != null ? inscripcionesRequest.Plan2 : 0);
@@ -34,7 +33,7 @@ namespace PSMApiRest.DAL
             Parametros.Add("@Plan7", inscripcionesRequest.Plan7 != null ? inscripcionesRequest.Plan7 : 0);
             Parametros.Add("@Plan8", inscripcionesRequest.Plan8 != null ? inscripcionesRequest.Plan8 : 0);
             Parametros.Add("@Plan9", inscripcionesRequest.Plan9 != null ? inscripcionesRequest.Plan9 : 0);
-            Parametros.Add("@Plan10", inscripcionesRequest.Plan10 != null ? inscripcionesRequest.Plan10 : 0);*/
+            Parametros.Add("@Plan10", inscripcionesRequest.Plan10 != null ? inscripcionesRequest.Plan10 : 0);
 
             List<Inscripciones> InscripcionesList = new List<Inscripciones>();
             dt = dbCon.Procedure("AMIGO", "InscripcionesSys", Parametros);
