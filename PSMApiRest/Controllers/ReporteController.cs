@@ -175,7 +175,7 @@ namespace PSMApiRest.Controllers
                     result.Content.Headers.ContentLength = stream.Length;
                     result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                     {
-                        FileName = "reporte_planes" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
+                        FileName = "reporte planes" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
                     };
                     result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                     return result;
@@ -183,7 +183,7 @@ namespace PSMApiRest.Controllers
             }
         }
         /// <summary>
-        /// Indicamos parametros para obtener reporte inscritor por carreras
+        /// Indicamos parametros para obtener reporte inscritos por carreras
         /// </summary>
         /// <param name="IdPeriodo"></param>
         /// <param name="IdCarrera"></param>
@@ -232,7 +232,60 @@ namespace PSMApiRest.Controllers
                     result.Content.Headers.ContentLength = stream.Length;
                     result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                     {
-                        FileName = "reporte_planes" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
+                        FileName = "reporte carreras" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
+                    };
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    return result;
+                }
+            }
+        }
+        /// <summary>
+        /// Indicamos parametros para obtener reporte inscritos por todas las carreras
+        /// </summary>
+        /// <param name="IdPeriodo"></param>
+        /// <param name="Desde"></param>
+        /// <param name="Hasta"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // GET: api/reporte/allcarreras
+        [HttpGet]
+        [Route("allcarreras")]
+        public HttpResponseMessage GetReporteAllCarreras([FromUri] int IdPeriodo, string Desde, string Hasta)
+        {
+            DataTable dt = new DataTable("allcarreras");
+            dt.Columns.AddRange(new DataColumn[7] { 
+                                            new DataColumn("Cedula", typeof(string)),
+                                            new DataColumn("Telefonos", typeof(string)),
+                                            new DataColumn("Email", typeof(string)),
+                                            new DataColumn("Carrera", typeof(string)),
+                                            new DataColumn("Tipo de ingreso", typeof(string)),
+                                            new DataColumn("Plan de pago", typeof(string)),
+                                            new DataColumn("Fecha de inscripcion", typeof(DateTime))
+            });
+
+            foreach (var reporte in reporteDAL.GetReporteAllCarreras(IdPeriodo, Desde, Hasta))
+            {
+                dt.Rows.Add(reporte.Cedula, reporte.Telefonos, reporte.EMail, reporte.Carrera, reporte.TiposIngreso, reporte.PlanDePago, reporte.Fecha);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    var wwb = wb.Worksheets.Add(dt);
+                    wwb.Columns().AdjustToContents();
+                    wb.SaveAs(stream);
+
+                    HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                    result.Content = new ByteArrayContent(stream.GetBuffer());
+                    result.Content.Headers.ContentLength = stream.Length;
+                    result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "reporte carreras" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
                     };
                     result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                     return result;

@@ -208,5 +208,39 @@ namespace PSMApiRest.DAL
             }
             return reporteList;
         }
+        public List<ReportePorCarreras> GetReporteAllCarreras(int IdPeriodo, string Desde, string Hasta)
+        {
+            Parametros.Clear();
+            Parametros.Add("@IdPeriodo", IdPeriodo);
+            Parametros.Add("@Desde", Desde);
+            Parametros.Add("@Hasta", Hasta);
+
+            List<ReportePorCarreras> reporteList = new List<ReportePorCarreras>();
+            dt = dbCon.Procedure("AMIGO", "ReporteCarreraSys", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        ReportePorCarreras reporte = new ReportePorCarreras();
+                        //reporte.Sexo = Convert.ToInt32(dt.Rows[i]["Sexo"]);
+                        //reporte.Id_Alumno = Convert.ToInt32(dt.Rows[i]["Id_Alumno"]);
+                        reporte.Cedula = Convert.ToString(dt.Rows[i]["Cedula"]);
+                        //reporte.Apellidos = Convert.ToString(dt.Rows[i]["Apellidos"]);
+                        //reporte.Nombres = Convert.ToString(dt.Rows[i]["Nombres"]);
+                        reporte.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
+                        reporte.EMail = Convert.ToString(dt.Rows[i]["EMail"]);
+                        reporte.Carrera = Convert.ToString(dt.Rows[i]["Carrera"]);
+                        reporte.TiposIngreso = Convert.ToString(dt.Rows[i]["TiposIngreso"]);
+                        reporte.PlanDePago = Convert.ToString(dt.Rows[i]["PlanDePago"]);
+                        reporte.Fecha = Convert.ToDateTime(dt.Rows[i]["Fecha"]);
+                        reporteList.Add(reporte);
+                    }
+                }
+            }
+            return reporteList;
+        }
     }
 }
