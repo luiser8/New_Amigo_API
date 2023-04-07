@@ -27,7 +27,7 @@ namespace PSMApiRest.Models
         public string PlanDePago { get; set; }
         public string TipoIngreso { get; set; }
         public decimal Monto { get; set; }
-        public DateTime FechaVencimiento { get; set; }
+        public string FechaVencimiento { get; set; }
         public string Telefonos { get; set; }
         public string Emails { get; set; }
         public DateTime Fecha { get; set; }

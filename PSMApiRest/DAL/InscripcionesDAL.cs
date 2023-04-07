@@ -85,7 +85,7 @@ namespace PSMApiRest.DAL
             }
             return Id_Inscripcion;
         }
-        public List<Inscripciones> InsertCuota(int Id_Inscripcion, int Id_Arancel, decimal Monto, DateTime FechaVencimiento)
+        public List<Inscripciones> InsertCuota(int Id_Inscripcion, int Id_Arancel, decimal Monto, string FechaVencimiento)
         {
             Parametros.Clear();
             Parametros.Add("@Id_Inscripcion", Id_Inscripcion);
