@@ -191,11 +191,12 @@ namespace PSMApiRest.DAL
             }
             return DeudaList;
         }
-        public List<Deuda> GetDeudasExists(int Id_Inscripcion, int Id_Arancel)
+        public List<Deuda> GetDeudasExists(int Id_Inscripcion, int Id_Arancel, int Pagada)
         {
             Parametros.Clear();
             Parametros.Add("@Id_Inscripcion", Id_Inscripcion);
             Parametros.Add("@Id_Arancel", Id_Arancel);
+            Parametros.Add("@Pagada", Pagada);
 
             List<Deuda> DeudaList = new List<Deuda>();
             dt = dbCon.Procedure("AMIGO", "DeudasExistentesSys", Parametros);

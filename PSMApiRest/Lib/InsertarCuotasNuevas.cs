@@ -17,7 +17,7 @@ namespace PSMApiRest.Models
                 for (int i = 0; i < inscripciones.Count; i++)
                 {
                     var facturaCount = facturaDAL.GetFacturaExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel);
-                    var deudaCount = deudaDAL.GetDeudasExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel);
+                    var deudaCount = deudaDAL.GetDeudasExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel, 0);
                     if (
                         facturaCount.Count == 0 && deudaCount.Count == 0)
                     {
@@ -41,7 +41,7 @@ namespace PSMApiRest.Models
                     if (
                         facturaDAL.GetFacturaExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel).Count == 0
                         &&
-                        deudaDAL.GetDeudasExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel).Count == 0)
+                        deudaDAL.GetDeudasExists(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel, 0).Count == 0)
                     {
                         inscripcionesDAL.InsertCuota(inscripciones[i].Id_Inscripcion, inscripcionesRequest.Id_Arancel, inscripcionesRequest.Monto, inscripcionesRequest.FechaVencimiento);
                     }
