@@ -181,6 +181,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AlumnoController.cs" />
     <Compile Include="Controllers\ArancelController.cs" />
+    <Compile Include="Controllers\BancosController.cs" />
     <Compile Include="Controllers\ConciliacionesController.cs" />
     <Compile Include="Controllers\CuotasController.cs" />
     <Compile Include="Controllers\DeudasController.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAL\AlumnoDAL.cs" />
     <Compile Include="DAL\ArancelDAL.cs" />
+    <Compile Include="DAL\BancosDAL.cs" />
     <Compile Include="DAL\ConciliacionesDAL.cs" />
     <Compile Include="DAL\CuotaDAL.cs" />
     <Compile Include="DAL\DeudaDAL.cs" />
@@ -222,6 +224,7 @@
     <Compile Include="Models\ActualizacionCuota.cs" />
     <Compile Include="Models\Alumno.cs" />
     <Compile Include="Models\Arancel.cs" />
+    <Compile Include="Models\Bancos.cs" />
     <Compile Include="Models\Conciliaciones.cs" />
     <Compile Include="Models\Cuota.cs" />
     <Compile Include="Models\CuotasInsertadas.cs" />
@@ -308,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Bancos\" />
     <Folder Include="Views\Conciliaciones\" />
     <Folder Include="Views\PeriodosContables\" />
   </ItemGroup>

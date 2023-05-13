@@ -58,4 +58,20 @@ namespace PSMApiRest.Models
         public string PlanDePago { get; set; }
         public DateTime Fecha { get; set; }
     }
+    public class ReporteFacturacion
+    {
+        public DateTime FechaDelPago { get; set; }
+        public string NroReferencia { get; set; }
+        public string NombresYapellidos { get; set; }
+        public string Cedula { get; set; }
+        public string EMail { get; set; }
+        public string Escuela { get; set; }
+        public decimal Monto { get; set; }
+        public decimal MontoIP { get; set; }
+        public string Concepto { get; set; }
+        public DateTime FechaRegistroPago { get; set; }
+        public string NroReciboCaja { get; set; }
+        public int Tipo { get; set; }
+
+    }
 }

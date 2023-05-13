@@ -15,7 +15,7 @@ namespace PSMApiRest.Controllers
     [RoutePrefix("api/reporte")]
     public class ReporteController : ApiController
     {
-        ReporteDAL reporteDAL = new ReporteDAL();
+        readonly ReporteDAL reporteDAL = new ReporteDAL();
 
         /// <summary>
         /// Indicamos parametros para obtener reporte de deudas
@@ -349,6 +349,61 @@ namespace PSMApiRest.Controllers
                 }
             }
             return StatusCode(HttpStatusCode.NoContent);
+        }
+        /// <summary>
+        /// Indicamos parametros para obtener reporte de facturacion
+        /// </summary>
+        /// <param name="Lapso"></param>
+        /// <param name="Pagada"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // GET: api/reporte/facturacion
+        [HttpGet]
+        [Route("facturacion")]
+        public HttpResponseMessage GetReporteFacturacion([FromUri] string FechaDesde, string FechaHasta, int IdBanco, int Tipo)
+        {
+            DataTable dt = new DataTable("Facturacion");
+            dt.Columns.AddRange(new DataColumn[9] { new DataColumn("FechaDelPago", typeof(DateTime)),
+                                            new DataColumn("NroReferencia", typeof(string)),
+                                            new DataColumn("NombresYapellidos", typeof(string)),
+                                            new DataColumn("Cedula", typeof(string)),
+                                            new DataColumn("Escuela", typeof(string)),
+                                            new DataColumn("Monto", typeof(decimal)),
+                                            new DataColumn("Concepto", typeof(string)),
+                                            new DataColumn("FechaRegistroPago", typeof(DateTime)),
+                                            new DataColumn("NroReciboCaja", typeof(string))
+            });
+
+            foreach (var reporte in reporteDAL.GetReporteFacturacion(FechaDesde, FechaHasta, IdBanco, Tipo))
+            {
+                dt.Rows.Add(reporte.FechaDelPago, reporte.NroReferencia, reporte.NombresYapellidos, reporte.Cedula, reporte.Escuela, reporte.Monto, reporte.Concepto, reporte.FechaRegistroPago, reporte.NroReciboCaja);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    var wwb = wb.Worksheets.Add(dt);
+                    wwb.Columns().AdjustToContents();
+                    wb.SaveAs(stream);
+
+                    HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new ByteArrayContent(stream.GetBuffer())
+                    };
+                    result.Content.Headers.ContentLength = stream.Length;
+                    result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "reporte facturacion" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
+                    };
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    return result;
+                }
+            }
         }
     }
 }

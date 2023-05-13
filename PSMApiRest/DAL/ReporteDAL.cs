@@ -242,5 +242,42 @@ namespace PSMApiRest.DAL
             }
             return reporteList;
         }
+        public List<ReporteFacturacion> GetReporteFacturacion(string FechaDesde, string FechaHasta, int IdBanco, int Tipo)
+        {
+            Parametros.Clear();
+            Parametros.Add("@FechaDesde", FechaDesde);
+            Parametros.Add("@FechaHasta", FechaHasta);
+            Parametros.Add("@IdBanco", IdBanco);
+            Parametros.Add("@Tipo", Tipo);
+
+            List<ReporteFacturacion> reporteList = new List<ReporteFacturacion>();
+            dt = dbCon.Procedure("AMIGO", "ReporteFacturacionSys", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        ReporteFacturacion reporte = new ReporteFacturacion
+                        {
+                            FechaDelPago = Convert.ToDateTime(dt.Rows[i]["FechaDelPago"]),
+                            NroReferencia = Convert.ToString(dt.Rows[i]["NroReferencia"]),
+                            NombresYapellidos = Convert.ToString(dt.Rows[i]["NombresYapellidos"]),
+                            Cedula = Convert.ToString(dt.Rows[i]["Cedula"]),
+                            Escuela = Convert.ToString(dt.Rows[i]["Escuela"]),
+                            Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]),
+                            MontoIP = Convert.ToDecimal(dt.Rows[i]["MontoIP"]),
+                            Concepto = Convert.ToString(dt.Rows[i]["Concepto"]),
+                            FechaRegistroPago = Convert.ToDateTime(dt.Rows[i]["FechaRegistroPago"]),
+                            NroReciboCaja = Convert.ToString(dt.Rows[i]["NroReciboCaja"]),
+                            Tipo = Convert.ToInt16(dt.Rows[i]["Tipo"])
+                        };
+                        reporteList.Add(reporte);
+                    }
+                }
+            }
+            return reporteList;
+        }
     }
 }
