@@ -374,7 +374,7 @@ namespace PSMApiRest.Controllers
                                             new DataColumn("Monto", typeof(decimal)),
                                             new DataColumn("Concepto", typeof(string)),
                                             new DataColumn("FechaRegistroPago", typeof(DateTime)),
-                                            new DataColumn("NroReciboCaja", typeof(string))
+                                            new DataColumn("NroFactura", typeof(string))
             });
 
             foreach (var reporte in reporteDAL.GetReporteFacturacion(FechaDesde, FechaHasta, IdBanco, Tipo))
