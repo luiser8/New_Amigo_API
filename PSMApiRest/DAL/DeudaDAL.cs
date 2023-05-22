@@ -54,12 +54,18 @@ namespace PSMApiRest.DAL
             }
             return DeudaList;
         }
-        public List<Deuda> GetAllDeudas(string Lapso, int Pagada, int Tipo)
+        public List<Deuda> GetAllDeudas(string Lapso, int Pagada, int Tipo, byte TodasCuota, int Cuota1, int Cuota2, int Cuota3, int Cuota4, int Cuota5)
         {
             Parametros.Clear();
             Parametros.Add("@Lapso", Lapso);
             Parametros.Add("@Pagada", Pagada);
             Parametros.Add("@Tipo", Tipo);
+            Parametros.Add("@TodasCuota", TodasCuota);
+            Parametros.Add("@Cuota1", Cuota1);
+            Parametros.Add("@Cuota2", Cuota2);
+            Parametros.Add("@Cuota3", Cuota3);
+            Parametros.Add("@Cuota4", Cuota4);
+            Parametros.Add("@Cuota5", Cuota5);
 
             List<Deuda> DeudaAllList = new List<Deuda>();
             dt = dbCon.Procedure("AMIGO", "DeudasSysNegativos", Parametros);

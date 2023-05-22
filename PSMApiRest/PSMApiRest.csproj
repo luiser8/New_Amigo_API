@@ -225,6 +225,7 @@
     <Compile Include="Models\Alumno.cs" />
     <Compile Include="Models\Arancel.cs" />
     <Compile Include="Models\Bancos.cs" />
+    <Compile Include="Models\CentrosDeCosto.cs" />
     <Compile Include="Models\Conciliaciones.cs" />
     <Compile Include="Models\Cuota.cs" />
     <Compile Include="Models\CuotasInsertadas.cs" />
@@ -233,7 +234,9 @@
     <Compile Include="Models\Inscripciones.cs" />
     <Compile Include="Lib\InsertarCuotasNuevas.cs" />
     <Compile Include="Models\Lapsos.cs" />
+    <Compile Include="Models\LibroDiario.cs" />
     <Compile Include="Models\PeriodosContables.cs" />
+    <Compile Include="Models\PlanCuentas.cs" />
     <Compile Include="Models\Planes.cs" />
     <Compile Include="Models\Reporte.cs" />
     <Compile Include="Models\Roles.cs" />
