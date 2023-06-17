@@ -36,7 +36,7 @@ namespace PSMApiRest.DAL
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         PeriodosContables item = new PeriodosContables();
-                        item.Id_Periodo = Convert.ToInt16(dt.Rows[i]["Id_Periodo"]);
+                        item.IdPeriodoContable = Convert.ToInt16(dt.Rows[i]["Id_Periodo"]);
                         item.Inicio = Convert.ToDateTime(dt.Rows[i]["Inicio"]);
                         item.Fin = Convert.ToDateTime(dt.Rows[i]["Fin"]);
                         item.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);

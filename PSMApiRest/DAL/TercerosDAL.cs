@@ -24,7 +24,7 @@ namespace PSMApiRest.DAL
             Parametros.Add("@Telefonos", Telefonos != "" ? Telefonos : null);
             Parametros.Add("@Emails", Emails != "" ? Emails : null);
 
-            dt = dbCon.Procedure("AMIGO", "TercerosSysUpdate", Parametros);
+            dbCon.Procedure("AMIGO", "TercerosSysUpdate", Parametros);
 
             return dbCon.ErrorEstatus;
         }
