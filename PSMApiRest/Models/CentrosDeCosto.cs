@@ -2,7 +2,7 @@
 {
     public class CentrosDeCosto
     {
-        public int IdCentro { get; set; }
+        public int IdCentroDeCosto { get; set; }
         public string Descripcion { get; set; }
         public byte Activo { get; set; }
     }

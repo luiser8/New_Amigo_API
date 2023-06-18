@@ -34,7 +34,7 @@ namespace PSMApiRest.DAL
                     {
                         CentrosDeCosto centrosDeCosto = new CentrosDeCosto
                         {
-                            IdCentro = Convert.ToInt32(dt.Rows[i]["Id_Centro"]),
+                            IdCentroDeCosto = Convert.ToInt32(dt.Rows[i]["Id_Centro"]),
                             Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]),
                             Activo = Convert.ToByte(dt.Rows[i]["Activo"]),
                         };

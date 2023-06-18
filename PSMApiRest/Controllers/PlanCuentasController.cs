@@ -73,7 +73,7 @@ namespace PSMApiRest.Controllers
         [Route("edit")]
         public IHttpActionResult PutPlanCuentas([FromBody] PlanCuentas planCuentas)
         {
-            if (planCuentas.IdCuenta != null)
+            if (planCuentas.IdPlanCuenta != null)
             {
                 try
                 {

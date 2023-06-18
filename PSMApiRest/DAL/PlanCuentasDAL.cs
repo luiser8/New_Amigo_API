@@ -37,7 +37,7 @@ namespace PSMApiRest.DAL
                     {
                         PlanCuentas planCuentas = new PlanCuentas
                         {
-                            IdCuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
+                            IdPlanCuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
                             IdTipoCuenta = Convert.ToInt32(dt.Rows[i]["Id_TipoCuenta"]),
                             IdInstitucion = Convert.ToInt32(dt.Rows[i]["Id_Institucion"]),
                             Numero = Convert.ToString(dt.Rows[i]["Numero"]),
@@ -76,7 +76,7 @@ namespace PSMApiRest.DAL
                     {
                         PlanCuentas planCuentas = new PlanCuentas
                         {
-                            IdCuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
+                            IdPlanCuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
                             IdTipoCuenta = Convert.ToInt32(dt.Rows[i]["Id_TipoCuenta"]),
                             IdInstitucion = Convert.ToInt32(dt.Rows[i]["Id_Institucion"]),
                             Numero = Convert.ToString(dt.Rows[i]["Numero"]),
@@ -102,7 +102,7 @@ namespace PSMApiRest.DAL
             try
             {
                 Parametros.Clear();
-                Parametros.Add("@IdCuenta", planCuentas.IdCuenta);
+                Parametros.Add("@IdPlanCuenta", planCuentas.IdPlanCuenta);
                 Parametros.Add("@IdTipoCuenta", planCuentas.IdTipoCuenta);
                 Parametros.Add("@IdInstitucion", planCuentas.IdInstitucion);
                 Parametros.Add("@Numero", planCuentas.Numero);

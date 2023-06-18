@@ -2,7 +2,7 @@
 {
     public class PlanCuentas
     {
-        public int IdCuenta { get; set; }
+        public int IdPlanCuenta { get; set; }
         public int IdTipoCuenta { get; set; }
         public int IdInstitucion { get; set; }
         public string Numero { get; set; }
