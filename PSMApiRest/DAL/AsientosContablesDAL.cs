@@ -85,18 +85,19 @@ namespace PSMApiRest.DAL
                     {
                         AsientoContableLibroMayor item = new AsientoContableLibroMayor
                         {
-                            IdAsientoDetalle = Convert.ToInt16(dt.Rows[i]["IdAsientoDetalle"]),
                             NroComprobante = Convert.ToInt32(dt.Rows[i]["NroComprobante"]),
                             IdPeriodoContable = Convert.ToInt16(dt.Rows[i]["IdPeriodoContable"]),
                             PeriodoContable = Convert.ToString(dt.Rows[i]["PeriodoContable"]),
                             NroCuenta = Convert.ToString(dt.Rows[i]["NroCuenta"]),
                             DescripcionCuenta = Convert.ToString(dt.Rows[i]["DescripcionCuenta"]),
+                            DescripcionAsiento = Convert.ToString(dt.Rows[i]["DescripcionAsiento"]),
                             TotalDebe = Convert.ToDecimal(dt.Rows[i]["TotalDebe"]),
                             TotalHaber = Convert.ToDecimal(dt.Rows[i]["TotalHaber"]),
                             Saldo = Convert.ToDecimal(dt.Rows[i]["Saldo"]),
                             SaldoTotal = Convert.ToDecimal(dt.Rows[i]["SaldoTotal"]),
                             AsientoActivo = Convert.ToBoolean(dt.Rows[i]["AsientoActivo"]),
-                            AsientoDetalleActivo = Convert.ToBoolean(dt.Rows[i]["AsientoDetalleActivo"])
+                            AsientoDetalleActivo = Convert.ToBoolean(dt.Rows[i]["AsientoDetalleActivo"]),
+                            FechaAsientoDetalle = Convert.ToDateTime(dt.Rows[i]["FechaAsientoDetalle"])
                         };
                         asientoContablesList.Add(item);
                     }
@@ -125,7 +126,6 @@ namespace PSMApiRest.DAL
                     {
                         AsientoContableBalance item = new AsientoContableBalance
                         {
-                            NroComprobante = Convert.ToInt32(dt.Rows[i]["NroComprobante"]),
                             IdPlanCuenta = Convert.ToInt16(dt.Rows[i]["IdPlanCuenta"]),
                             NroCuenta = Convert.ToString(dt.Rows[i]["NroCuenta"]),
                             DescripcionCuenta = Convert.ToString(dt.Rows[i]["DescripcionCuenta"]),
@@ -167,7 +167,7 @@ namespace PSMApiRest.DAL
             int IdAsientoDetalle = 0;
             try
             {
-                if (asientoContableDetallePayload.Count > 1)
+                if (asientoContableDetallePayload.Count > 0)
                 {
                     foreach(var item in asientoContableDetallePayload)
                     {

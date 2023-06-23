@@ -75,20 +75,20 @@ namespace PSMApiRest.Models
         public int NroComprobante { get; set; }
         public int IdPeriodoContable { get; set; }
         public string PeriodoContable { get; set; }
-        public int IdAsientoDetalle { get; set; }
         public string NroCuenta { get; set; }
         public string DescripcionCuenta { get; set; }
+        public string DescripcionAsiento { get; set; }
         public decimal TotalDebe { get; set; }
         public decimal TotalHaber { get; set; }
         public decimal Saldo { get; set; }
         public decimal SaldoTotal { get; set; }
         public bool AsientoActivo { get; set; }
         public bool AsientoDetalleActivo { get; set; }
+        public DateTime FechaAsientoDetalle { get; set; }
     }
 
     public class AsientoContableBalance
     {
-        public int NroComprobante { get; set; }
         public int IdPlanCuenta { get; set; }
         public string NroCuenta { get; set; }
         public string DescripcionCuenta { get; set; }
