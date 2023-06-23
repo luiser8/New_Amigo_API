@@ -6,10 +6,10 @@ namespace PSMApiRest.Lib
 {
     public class ActualizarCuotas
     {
-        public List<Deuda> Establecer(decimal Cuota, byte Abono, string Lapso, int Pagada, int Tipo)
+        public List<Deuda> Establecer(decimal Cuota, byte Abono, string Lapso, int Pagada, int Tipo, byte TodasCuota, int Cuota1, int Cuota2, int Cuota3, int Cuota4, int Cuota5)
         {
             DeudaDAL deudaDAL = new DeudaDAL();
-            List<Deuda> deudas = deudaDAL.GetAllDeudas(Lapso, Pagada, Tipo);
+            List<Deuda> deudas = deudaDAL.GetAllDeudas(Lapso, Pagada, Tipo, TodasCuota, Cuota1, Cuota2, Cuota3, Cuota4, Cuota5);
 
             if (deudas.Count > 0)
             {

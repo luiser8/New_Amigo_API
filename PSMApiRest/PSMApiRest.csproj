@@ -181,14 +181,18 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AlumnoController.cs" />
     <Compile Include="Controllers\ArancelController.cs" />
+    <Compile Include="Controllers\AsientosContablesController.cs" />
     <Compile Include="Controllers\BancosController.cs" />
+    <Compile Include="Controllers\CentrosDeCostoController.cs" />
     <Compile Include="Controllers\ConciliacionesController.cs" />
     <Compile Include="Controllers\CuotasController.cs" />
     <Compile Include="Controllers\DeudasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InscripcionController.cs" />
     <Compile Include="Controllers\LapsosController.cs" />
+    <Compile Include="Controllers\MonedasController.cs" />
     <Compile Include="Controllers\PeriodosContablesController.cs" />
+    <Compile Include="Controllers\PlanCuentasController.cs" />
     <Compile Include="Controllers\PlanesController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
@@ -197,14 +201,18 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAL\AlumnoDAL.cs" />
     <Compile Include="DAL\ArancelDAL.cs" />
+    <Compile Include="DAL\AsientosContablesDAL.cs" />
     <Compile Include="DAL\BancosDAL.cs" />
+    <Compile Include="DAL\CentrosDeCostoDAL.cs" />
     <Compile Include="DAL\ConciliacionesDAL.cs" />
     <Compile Include="DAL\CuotaDAL.cs" />
     <Compile Include="DAL\DeudaDAL.cs" />
     <Compile Include="DAL\FacturaDAL.cs" />
     <Compile Include="DAL\InscripcionesDAL.cs" />
     <Compile Include="DAL\LapsosDAL.cs" />
+    <Compile Include="DAL\MonedasDAL.cs" />
     <Compile Include="DAL\PeriodosContablesDAL.cs" />
+    <Compile Include="DAL\PlanCuentasDAL.cs" />
     <Compile Include="DAL\PlanesDAL.cs" />
     <Compile Include="DAL\ReporteDAL.cs" />
     <Compile Include="DAL\RolesDAL.cs" />
@@ -225,6 +233,7 @@
     <Compile Include="Models\Alumno.cs" />
     <Compile Include="Models\Arancel.cs" />
     <Compile Include="Models\Bancos.cs" />
+    <Compile Include="Models\CentrosDeCosto.cs" />
     <Compile Include="Models\Conciliaciones.cs" />
     <Compile Include="Models\Cuota.cs" />
     <Compile Include="Models\CuotasInsertadas.cs" />
@@ -233,7 +242,10 @@
     <Compile Include="Models\Inscripciones.cs" />
     <Compile Include="Lib\InsertarCuotasNuevas.cs" />
     <Compile Include="Models\Lapsos.cs" />
+    <Compile Include="Models\AsientoContable.cs" />
+    <Compile Include="Models\Monedas.cs" />
     <Compile Include="Models\PeriodosContables.cs" />
+    <Compile Include="Models\PlanCuentas.cs" />
     <Compile Include="Models\Planes.cs" />
     <Compile Include="Models\Reporte.cs" />
     <Compile Include="Models\Roles.cs" />
@@ -311,9 +323,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AsientosContables\" />
     <Folder Include="Views\Bancos\" />
+    <Folder Include="Views\CentrosDeCosto\" />
     <Folder Include="Views\Conciliaciones\" />
+    <Folder Include="Views\Monedas\" />
     <Folder Include="Views\PeriodosContables\" />
+    <Folder Include="Views\PlanCuentas\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -360,7 +376,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56951</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56951/</IISUrl>
+          <IISUrl>http://localhost/ApiPSMDebug</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

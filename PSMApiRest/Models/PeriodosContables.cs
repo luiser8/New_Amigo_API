@@ -4,7 +4,7 @@ namespace PSMApiRest.Models
 {
     public class PeriodosContables
     {
-        public int Id_Periodo { get; set; }
+        public int IdPeriodoContable { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fin { get; set; }
         public string Descripcion { get; set; }

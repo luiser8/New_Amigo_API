@@ -203,7 +203,18 @@ namespace PSMApiRest.Controllers
             {
                 try
                 {
-                    return Ok(actualizarCuotas.Establecer(actualizacionCuota.Cuota, actualizacionCuota.Abono, actualizacionCuota.Lapso, actualizacionCuota.Pagada, actualizacionCuota.Tipo).Count);
+                    return Ok(actualizarCuotas.Establecer(actualizacionCuota.Cuota, 
+                                                            actualizacionCuota.Abono, 
+                                                            actualizacionCuota.Lapso, 
+                                                            actualizacionCuota.Pagada, 
+                                                            actualizacionCuota.Tipo, 
+                                                            actualizacionCuota.TodasCuota, 
+                                                            actualizacionCuota.Cuota1,
+                                                            actualizacionCuota.Cuota2,
+                                                            actualizacionCuota.Cuota3,
+                                                            actualizacionCuota.Cuota4,
+                                                            actualizacionCuota.Cuota5
+                                                            ).Count);
                 }
                 catch (Exception ex)
                 {
