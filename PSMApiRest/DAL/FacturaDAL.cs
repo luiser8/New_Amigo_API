@@ -72,35 +72,5 @@ namespace PSMApiRest.DAL
             }
             return FacturaList;
         }
-        public List<Factura> DeleteFactura(int Id_Factura)
-        {
-            Parametros.Clear();
-            Parametros.Add("@Id_Factura", Id_Factura);
-
-            List<Factura> FacturaList = new List<Factura>();
-            dt = dbCon.Procedure("AMIGO", "FacturasSysDelete", Parametros);
-
-            try
-            {
-                if (dbCon.ErrorEstatus)
-                {
-                    if (dt.Rows.Count != 0)
-                    {
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-                            Factura factura = new Factura();
-                            factura.Id_Factura = Id_Factura;
-                            FacturaList.Add(factura);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return FacturaList;
-        }
     }
 }

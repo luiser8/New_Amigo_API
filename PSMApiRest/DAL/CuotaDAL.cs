@@ -106,6 +106,36 @@ namespace PSMApiRest.DAL
             }
             return CuotaList;
         }
+        public List<CuotasInsertadasDelete> GetResetCuotasInserts(CuotasResetPayload cuotasResetPayload)
+        {
+            Parametros.Clear();
+            Parametros.Add("@Lapso", cuotasResetPayload.Lapso);
+            Parametros.Add("@Arancel0", cuotasResetPayload.Arancel0);
+            Parametros.Add("@Arancel1", cuotasResetPayload.Arancel1);
+            Parametros.Add("@Arancel2", cuotasResetPayload.Arancel2);
+            Parametros.Add("@Arancel3", cuotasResetPayload.Arancel3);
+            Parametros.Add("@Arancel4", cuotasResetPayload.Arancel4);
+            Parametros.Add("@Pagada", cuotasResetPayload.Pagada);
+
+            List<CuotasInsertadasDelete> CuotaList = new List<CuotasInsertadasDelete>();
+            dt = dbCon.Procedure("AMIGO", "CuotasSelectSysReset", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        CuotasInsertadasDelete cuota = new CuotasInsertadasDelete();
+                        cuota.IdInscripcion = Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]);
+                        cuota.IdArancel = Convert.ToInt32(dt.Rows[i]["Id_Arancel"]);
+                        cuota.Pagada = Convert.ToInt32(dt.Rows[i]["Pagada"]);
+                        CuotaList.Add(cuota);
+                    }
+                }
+            }
+            return CuotaList;
+        }
         public List<Cuota> InsertCuota(int CuotaId, byte Tipo, decimal Dolar, decimal Tasa, decimal Monto, string Lapso, byte Estado)
         {
             Parametros.Clear();
