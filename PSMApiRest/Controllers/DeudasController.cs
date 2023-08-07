@@ -44,7 +44,6 @@ namespace PSMApiRest.Controllers
         /// Indicamos parametros para obtener deuda
         /// </summary>
         /// <param name="pagada"></param>
-        /// <param name="id_factura"></param>
         /// <param name="id_inscripcion"></param>
         /// <param name="id_arancel"></param>
         /// <returns> 
@@ -54,21 +53,45 @@ namespace PSMApiRest.Controllers
         /// <response code="400">Retorno de null si no hay registros</response> 
         // DELETE: api/deudas/delete
         [Route("delete")]
-        public IHttpActionResult DeleteDeuda([FromUri] int? pagada, int? id_factura, int? id_inscripcion, int? id_arancel)
+        public IHttpActionResult DeleteDeuda([FromUri] int? pagada, int? id_inscripcion, int? id_arancel)
         {
             if (id_inscripcion != null && id_arancel != null)
             {
                 try
                 {
-                    if (id_factura != 0)
+                    return Ok(deudaDAL.DeleteDeuda((int)pagada, (int)id_inscripcion, (int)id_arancel).ToList());             
+                }
+                catch (Exception ex)
+                {
+                    return (IHttpActionResult)Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                }
+            }
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+        /// <summary>
+        /// Indicamos parametros para obtener deudas insertadas y eliminarlas
+        /// </summary>
+        /// <param name="cuotasResetPayload"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // DELETE: api/deudas/reset
+        [Route("reset")]
+        public IHttpActionResult ResetDeudasInserts(CuotasResetPayload cuotasResetPayload)
+        {
+            if (cuotasResetPayload.Lapso != null)
+            {
+                CuotaDAL cuotaDAL = new CuotaDAL();
+                try
+                {
+                    var idInscripciones = cuotaDAL.GetResetCuotasInserts(cuotasResetPayload).ToList();
+                    foreach (var item in idInscripciones)
                     {
-                        FacturaDAL facturaDAL = new FacturaDAL();
-                        return Ok(facturaDAL.DeleteFactura((int)id_factura).ToList());
-                    }
-                    else
-                    {
-                        return Ok(deudaDAL.DeleteDeuda((int)pagada, (int)id_inscripcion, (int)id_arancel).ToList());
-                    }              
+                        deudaDAL.DeleteDeuda(item.Pagada, item.IdInscripcion, item.IdArancel).ToList();
+                    };
+                    return Ok();
                 }
                 catch (Exception ex)
                 {
