@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using PSMApiRest.Lib;
+using PSMApiRest.Models;
 
 namespace PSMApiRest.DAL
 {
@@ -27,6 +30,26 @@ namespace PSMApiRest.DAL
             dbCon.Procedure("AMIGO", "TercerosSysUpdate", Parametros);
 
             return dbCon.ErrorEstatus;
+        }
+
+        public bool GetTercero(string Identificador)
+        {
+            Parametros.Clear();
+            Parametros.Add("@Identificador", Identificador);
+            dt = dbCon.Procedure("AMIGO", "TercerosSysSelect", Parametros);
+            int existe = 0;
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        existe = Convert.ToInt32(dt.Rows[i]["Existe"]);
+                    }
+                }
+            }
+            return existe > 0 ? true : false;
         }
     }
 }
