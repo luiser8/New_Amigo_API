@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 namespace PSMApiRest.Models
 {
+
+    public class DeudaPayload
+    {
+        public string Lapso { get; set; }
+        public string Identificador { get; set; }
+    }
+
+    public class Respuesta
+    {
+        public bool? NoPasa { get; set; } = false;
+        public bool? EsBecado { get; set; } = false;
+        public bool? PagoTodo { get; set; } = false;
+        public bool? EsDesertor { get; set; } = false;
+        public bool? Existe { get; set; } = false;
+        public bool? EsAgresado { get; set; } = false;
+        public bool? SinDocumentos { get; set; }
+        public string PlanDePago { get; set; }
+        public List<Deuda> Deudas { get; set; }
+    }
     public class Deuda
     {
         public int Id_Cuenta { get; set; }
@@ -16,5 +35,6 @@ namespace PSMApiRest.Models
         public decimal MontoFacturas { get; set; }
         public decimal Total { get; set; }
         public DateTime FechaVencimiento { get; set; }
+        //public bool? NoPasa { get; set; } = false;
     }
 }

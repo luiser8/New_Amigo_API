@@ -20,14 +20,14 @@ namespace PSMApiRest.DAL
             Parametros = new Hashtable();
         }
 
-        public List<Deuda> GetDeuda(string Lapso, string Identificador)
+        public Respuesta GetDeuda(string Lapso, string Identificador)
         {
             Parametros.Clear();
             Parametros.Add("@Lapso", Lapso);
-            //Parametros.Add("@Pagada", Pagada);
             Parametros.Add("@Identificador", Identificador != "" ? Identificador : null);
 
-            List<Deuda> DeudaList = new List<Deuda>();
+            Respuesta respuesta = new Respuesta();
+            List<Deuda> deudasList = new List<Deuda>();
             dt = dbCon.Procedure("AMIGO", "DeudasSys", Parametros);
 
             if (dbCon.ErrorEstatus)
@@ -36,23 +36,26 @@ namespace PSMApiRest.DAL
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Deuda deuda = new Deuda();
-                        deuda.Id_Cuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]);
-                        deuda.Id_Inscripcion = Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]);
-                        deuda.Id_Arancel = Convert.ToInt32(dt.Rows[i]["Id_Arancel"]);
-                        deuda.Identificador = Convert.ToString(dt.Rows[i]["Identificador"]);
-                        deuda.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
-                        deuda.Lapso = Convert.ToString(dt.Rows[i]["Lapso"]);
-                        deuda.Pagada = Convert.ToByte(dt.Rows[i]["Pagada"]);
-                        deuda.Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]);
-                        deuda.MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]);
-                        deuda.FechaVencimiento = Convert.ToDateTime(dt.Rows[i]["FechaVencimiento"]);
-                        deuda.Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100;
-                        DeudaList.Add(deuda);
+                        var deudas = new Deuda
+                        {
+                            Id_Cuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
+                            Id_Inscripcion = Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]),
+                            Id_Arancel = Convert.ToInt32(dt.Rows[i]["Id_Arancel"]),
+                            Identificador = Convert.ToString(dt.Rows[i]["Identificador"]),
+                            Cuota = Convert.ToString(dt.Rows[i]["Cuota"]),
+                            Lapso = Convert.ToString(dt.Rows[i]["Lapso"]),
+                            Pagada = Convert.ToByte(dt.Rows[i]["Pagada"]),
+                            Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]),
+                            MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]),
+                            FechaVencimiento = Convert.ToDateTime(dt.Rows[i]["FechaVencimiento"]),
+                            Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100
+                        };
+                        deudasList.Add(deudas);
                     }
                 }
+                respuesta.Deudas = deudasList;
             }
-            return DeudaList;
+            return respuesta;
         }
         public List<Deuda> GetAllDeudas(string Lapso, int Pagada, int Tipo, byte TodasCuota, int Cuota1, int Cuota2, int Cuota3, int Cuota4, int Cuota5)
         {
@@ -223,6 +226,66 @@ namespace PSMApiRest.DAL
                 }
             }
             return DeudaList;
+        }
+        public bool DeudaListSinDocumentos(int identificador)
+        {
+            bool existe = false;
+           
+            int[] alumnosId = new int[] {31831847,
+                31901026,
+                31964441,
+                30700466,
+                32108543,
+                31257480,
+                31601245,
+                31713843,
+                28607006,
+                31685635,
+                31698524,
+                31601373,
+                31468829,
+                32195060,
+                32355594,
+                31378385,
+                31832182,
+                31809300,
+                31997040,
+                28057266,
+                30954924,
+                30794044,
+                32009878,
+                28526878,
+                31162994,
+                31520022,
+                31160419,
+                31609779,
+                31335170,
+                31800063,
+                30828948,
+                31609429,
+                31245417,
+                31609812,
+                30953581,
+                31121405,
+                31351576,
+                32406808,
+                32010136,
+                31186233,
+                31760672,
+                31985986};
+
+            if (alumnosId.Length > 0 )
+            {
+                foreach (var item in alumnosId)
+                {
+                    if(item == identificador)
+                    {
+                        existe = true; break;
+                    }
+                }
+            }
+
+            return existe;
         }
     }
 }

@@ -13,11 +13,13 @@ namespace PSMApiRest.Controllers
     [RoutePrefix("api/deudas")]
     public class DeudasController : ApiController
     {
-        DeudaDAL deudaDAL = new DeudaDAL();
+        readonly DeudaDAL deudaDAL = new DeudaDAL();
+        readonly InscripcionesDAL inscripcionesDAL = new InscripcionesDAL();
+        readonly TercerosDAL tercerosDAL = new TercerosDAL();
         /// <summary>
         /// Indicamos parametros para obtener deuda
         /// </summary>
-        /// <param name="deuda"></param>
+        /// <param name="deudaPayload"></param>
         /// <returns> 
         ///     Retorna un objeto JSON
         /// </returns>
@@ -25,20 +27,61 @@ namespace PSMApiRest.Controllers
         /// <response code="400">Retorno de null si no hay registros</response> 
         // POST: api/deudas/check
         [Route("check")]
-        public IHttpActionResult Check([FromBody] Deuda deuda)
+        public IHttpActionResult Check([FromBody] DeudaPayload deudaPayload)
         {
-            if (deuda.Lapso != null)
+            if (deudaPayload.Lapso != null && deudaPayload.Identificador != null)
             {
                 try
                 {
-                    return Ok(deudaDAL.GetDeuda(deuda.Lapso, deuda.Identificador).ToList());
+                    var respuesta = deudaDAL.GetDeuda(deudaPayload.Lapso, deudaPayload.Identificador);
+                    var respuestaTipo = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).ToList();
+                    string planDePago = respuestaTipo.Count >= 1 ? respuestaTipo.FirstOrDefault().PlanDePago : "No encontrado";
+                    bool esBecado = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).Where(x => x.PlanDePago.Contains("BECA")).Count() >= 1;
+                    bool existe = tercerosDAL.GetTercero(deudaPayload.Identificador);
+
+                    respuesta.PlanDePago = planDePago;
+                    respuesta.Existe = existe;
+
+                    if (esBecado && respuestaTipo.Count >= 1)
+                    {
+                        respuesta.NoPasa = false;
+                        respuesta.EsBecado = true;
+                    }
+
+                    if (respuesta.Deudas.Count == 0 && !esBecado && respuestaTipo.Count >= 1)
+                    {
+                        respuesta.PagoTodo = true;
+                    }
+
+                    if (!esBecado && respuestaTipo.Count <= 0 && respuesta.Deudas.Count == 0 && existe)
+                    {
+                        respuesta.NoPasa = true;
+                        respuesta.EsDesertor = true;
+                    }
+                    if (!existe)
+                    {
+                        respuesta.NoPasa = true;
+                    }
+
+                    for (int i = 0; i < respuesta.Deudas.Count; i++)
+                    {
+                        DateTime today = DateTime.Now;
+                        int compare = DateTime.Compare(today, respuesta.Deudas[i].FechaVencimiento);
+                        if (compare >= 1)
+                        {
+                            respuesta.NoPasa = true;
+                            respuesta.EsBecado = false;
+                        }
+                    }
+                    respuesta.SinDocumentos = deudaDAL.DeudaListSinDocumentos(Convert.ToInt32(deudaPayload.Identificador));
+                        return Ok(respuesta);
                 }
                 catch (Exception ex)
                 {
                     return (IHttpActionResult)Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
                 }
             }
-            return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.NotFound);
         }
         /// <summary>
         /// Indicamos parametros para obtener deuda
