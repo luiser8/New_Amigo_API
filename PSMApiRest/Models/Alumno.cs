@@ -10,6 +10,7 @@ namespace PSMApiRest.Models
         public Byte[] Foto { get; set; }
         public byte Sexo { get; set; }
         public string LapCur { get; set; }
+        public string LapIng { get; set; }
         public string EstAca { get; set; }
         public int codcarrera { get; set; }
     }

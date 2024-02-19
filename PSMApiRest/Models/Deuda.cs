@@ -17,7 +17,7 @@ namespace PSMApiRest.Models
         public bool? PagoTodo { get; set; } = false;
         public bool? EsDesertor { get; set; } = false;
         public bool? Existe { get; set; } = false;
-        public bool? EsAgresado { get; set; } = false;
+        public bool? EsEgresado { get; set; } = false;
         public bool? SinDocumentos { get; set; }
         public string PlanDePago { get; set; }
         public List<Deuda> Deudas { get; set; }

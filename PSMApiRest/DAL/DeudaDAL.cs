@@ -227,58 +227,17 @@ namespace PSMApiRest.DAL
             }
             return DeudaList;
         }
-        public bool DeudaListSinDocumentos(int identificador)
+        public bool DeudaListSinDocumentos(long identificador)
         {
             bool existe = false;
-           
-            int[] alumnosId = new int[] {31831847,
-                31901026,
-                31964441,
-                30700466,
-                32108543,
-                31257480,
-                31601245,
-                31713843,
-                28607006,
-                31685635,
-                31698524,
-                31601373,
-                31468829,
-                32195060,
-                32355594,
-                31378385,
-                31832182,
-                31809300,
-                31997040,
-                28057266,
-                30954924,
-                30794044,
-                32009878,
-                28526878,
-                31162994,
-                31520022,
-                31160419,
-                31609779,
-                31335170,
-                31800063,
-                30828948,
-                31609429,
-                31245417,
-                31609812,
-                30953581,
-                31121405,
-                31351576,
-                32406808,
-                32010136,
-                31186233,
-                31760672,
-                31985986};
 
-            if (alumnosId.Length > 0 )
+            int[] alumnosId = SinDocumentos.getSinDocumentos();
+
+            if (alumnosId.Length > 0)
             {
                 foreach (var item in alumnosId)
                 {
-                    if(item == identificador)
+                    if (item == identificador)
                     {
                         existe = true; break;
                     }

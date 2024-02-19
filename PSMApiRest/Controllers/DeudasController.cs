@@ -16,6 +16,7 @@ namespace PSMApiRest.Controllers
         readonly DeudaDAL deudaDAL = new DeudaDAL();
         readonly InscripcionesDAL inscripcionesDAL = new InscripcionesDAL();
         readonly TercerosDAL tercerosDAL = new TercerosDAL();
+        readonly AlumnoDAL alumnoDAL = new AlumnoDAL();
         /// <summary>
         /// Indicamos parametros para obtener deuda
         /// </summary>
@@ -38,6 +39,8 @@ namespace PSMApiRest.Controllers
                     string planDePago = respuestaTipo.Count >= 1 ? respuestaTipo.FirstOrDefault().PlanDePago : "No encontrado";
                     bool esBecado = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).Where(x => x.PlanDePago.Contains("BECA")).Count() >= 1;
                     bool existe = tercerosDAL.GetTercero(deudaPayload.Identificador);
+                    string estadoAcademico = alumnoDAL.GetAlumnoEstAca(deudaPayload.Identificador);
+                    string lapsoIngreso = alumnoDAL.GetAlumnoLapIng(deudaPayload.Identificador);
 
                     respuesta.PlanDePago = planDePago;
                     respuesta.Existe = existe;
@@ -52,11 +55,15 @@ namespace PSMApiRest.Controllers
                     {
                         respuesta.PagoTodo = true;
                     }
-
-                    if (!esBecado && respuestaTipo.Count <= 0 && respuesta.Deudas.Count == 0 && existe)
+                    if (!esBecado && respuestaTipo.Count <= 0 && respuesta.Deudas.Count == 0 && existe && estadoAcademico != "Egresado")
                     {
                         respuesta.NoPasa = true;
                         respuesta.EsDesertor = true;
+                    }
+                    if (estadoAcademico == "Egresado")
+                    {
+                        respuesta.EsEgresado = true;
+                        respuesta.NoPasa = false;
                     }
                     if (!existe)
                     {
@@ -73,8 +80,19 @@ namespace PSMApiRest.Controllers
                             respuesta.EsBecado = false;
                         }
                     }
-                    respuesta.SinDocumentos = deudaDAL.DeudaListSinDocumentos(Convert.ToInt32(deudaPayload.Identificador));
-                        return Ok(respuesta);
+
+                    if (DateTime.TryParse(lapsoIngreso, out DateTime fechaIngreso))
+                    {
+                        if (fechaIngreso >= new DateTime(2022, 1, 1))
+                        {
+                            respuesta.SinDocumentos = alumnoDAL.GetAlumnoDocumentosPorConsignar(deudaPayload.Identificador);
+                        }
+                        else
+                        {
+                            respuesta.SinDocumentos = false;
+                        }
+                    }
+                    return Ok(respuesta);
                 }
                 catch (Exception ex)
                 {

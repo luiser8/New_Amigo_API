@@ -216,6 +216,7 @@
     <Compile Include="Lib\Conexion.cs" />
     <Compile Include="Lib\DB.cs" />
     <Compile Include="Lib\MD5.cs" />
+    <Compile Include="Lib\SinDocumentos.cs" />
     <Compile Include="Models\Abono.cs" />
     <Compile Include="Models\ActualizacionCuota.cs" />
     <Compile Include="Models\Alumno.cs" />
