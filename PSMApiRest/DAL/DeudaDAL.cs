@@ -20,9 +20,10 @@ namespace PSMApiRest.DAL
             Parametros = new Hashtable();
         }
 
-        public Respuesta GetDeuda(string Lapso, string Identificador)
+        public Respuesta GetDeuda(bool Puerta, string Lapso, string Identificador)
         {
             Parametros.Clear();
+            Parametros.Add("@Puerta", Puerta ? 1 : 0);
             Parametros.Add("@Lapso", Lapso);
             Parametros.Add("@Identificador", Identificador != "" ? Identificador : null);
 
@@ -38,19 +39,22 @@ namespace PSMApiRest.DAL
                     {
                         var deudas = new Deuda
                         {
-                            Id_Cuenta = Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]),
-                            Id_Inscripcion = Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]),
-                            Id_Arancel = Convert.ToInt32(dt.Rows[i]["Id_Arancel"]),
-                            Identificador = Convert.ToString(dt.Rows[i]["Identificador"]),
-                            Cuota = Convert.ToString(dt.Rows[i]["Cuota"]),
-                            Lapso = Convert.ToString(dt.Rows[i]["Lapso"]),
+                            Id_Cuenta = dt.Rows[i]["Id_Cuenta"] != null ? Convert.ToInt32(dt.Rows[i]["Id_Cuenta"]) : 0,
+                            Id_Inscripcion = dt.Rows[i]["Id_Inscripcion"] != null ? Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]) : 0,
+                            Id_Arancel = dt.Rows[i]["Id_Arancel"] != null ? Convert.ToInt32(dt.Rows[i]["Id_Arancel"]) : 0,
+                            Identificador = dt.Rows[i]["Identificador"] != null ? Convert.ToString(dt.Rows[i]["Identificador"]) : "",
+                            Cuota = dt.Rows[i]["Cuota"] != null ? Convert.ToString(dt.Rows[i]["Cuota"]) : "",
+                            Lapso = dt.Rows[i]["Lapso"] != null ? Convert.ToString(dt.Rows[i]["Lapso"]) : "",
                             Pagada = Convert.ToByte(dt.Rows[i]["Pagada"]),
-                            Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]),
-                            MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]),
-                            FechaVencimiento = Convert.ToDateTime(dt.Rows[i]["FechaVencimiento"]),
-                            Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100
+                            Monto = dt.Rows[i]["Monto"] != null ? Convert.ToInt32(dt.Rows[i]["Monto"]) : 0,
+                            MontoFacturas = Puerta ? 0 : Convert.ToInt32(dt.Rows[i]["MontoFacturas"]),
+                            FechaVencimiento = Puerta || dt.Rows[i]["FechaVencimiento"] == null ? DateTime.Now : Convert.ToDateTime(dt.Rows[i]["FechaVencimiento"]),
+                            Total = dt.Rows[i]["Total"] != null ? Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100 : 0,
                         };
-                        deudasList.Add(deudas);
+                        if (Convert.ToInt32(dt.Rows[i]["Monto"]) > 0)
+                        {
+                            deudasList.Add(deudas);
+                        }
                     }
                 }
                 respuesta.Deudas = deudasList;

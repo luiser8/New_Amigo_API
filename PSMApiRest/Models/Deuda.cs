@@ -6,6 +6,7 @@ namespace PSMApiRest.Models
 
     public class DeudaPayload
     {
+        public bool Puerta { get; set; }
         public string Lapso { get; set; }
         public string Identificador { get; set; }
     }
@@ -19,6 +20,7 @@ namespace PSMApiRest.Models
         public bool? Existe { get; set; } = false;
         public bool? EsEgresado { get; set; } = false;
         public bool? SinDocumentos { get; set; }
+        public bool? EsAmonestado { get; set; }
         public string PlanDePago { get; set; }
         public List<Deuda> Deudas { get; set; }
     }

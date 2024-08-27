@@ -34,7 +34,7 @@ namespace PSMApiRest.Controllers
             {
                 try
                 {
-                    var respuesta = deudaDAL.GetDeuda(deudaPayload.Lapso, deudaPayload.Identificador);
+                    var respuesta = deudaDAL.GetDeuda(deudaPayload.Puerta, deudaPayload.Lapso, deudaPayload.Identificador);
                     var respuestaTipo = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).ToList();
                     string planDePago = respuestaTipo.Count >= 1 ? respuestaTipo.FirstOrDefault().PlanDePago : "No encontrado";
                     bool esBecado = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).Where(x => x.PlanDePago.Contains("BECA")).Count() >= 1;
@@ -64,6 +64,11 @@ namespace PSMApiRest.Controllers
                     {
                         respuesta.EsEgresado = true;
                         respuesta.NoPasa = false;
+                    }
+                    if (estadoAcademico == "Amonestado" || estadoAcademico == "Suspensión Académica")
+                    {
+                        respuesta.EsAmonestado = true;
+                        respuesta.NoPasa = true;
                     }
                     if (!existe)
                     {
