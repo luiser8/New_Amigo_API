@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSMApiRest.Models;
+using System;
 
 namespace PSMApiRest.Models
 {
@@ -13,5 +14,22 @@ namespace PSMApiRest.Models
         public decimal Anulada { get; set; }
         public string Descripcion { get; set; }
         public DateTime Hora { get; set; }
+    }
+    
+    public class SaldoAFavorDto
+    {
+        public int Id_Factura { get; set; }
+        public string Cedula { get; set; }
+        public decimal Monto { get; set; }
+    }
+
+    public class DepositoDto
+    {
+        public int Id_Factura { get; set; }
+        public string Id_Banco { get; set; }
+        public string Referencia { get; set; }
+        public string Fecha { get; set; }
+        public decimal Monto { get; set; }
+        public int Tipo { get; set; }
     }
 }

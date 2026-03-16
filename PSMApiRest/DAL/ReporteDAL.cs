@@ -19,14 +19,13 @@ namespace PSMApiRest.DAL
             dbCon = new DB();
             Parametros = new Hashtable();
         }
-        public List<Reporte> GetReporteDeudas(string Lapso, byte Pagada)
+        public List<Reporte> GetReporteDeudas(string Lapso, byte Pagada = 0)
         {
             Parametros.Clear();
             Parametros.Add("@Lapso", Lapso);
-            Parametros.Add("@Pagada", Pagada);
 
             List<Reporte> reporteList = new List<Reporte>();
-            dt = dbCon.Procedure("AMIGO", "DeudasSysReporte", Parametros);
+            dt = dbCon.Procedure("AMIGO_PUERTA", "ListadoDeudas", Parametros);
 
             if (dbCon.ErrorEstatus)
             {
@@ -35,24 +34,66 @@ namespace PSMApiRest.DAL
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         Reporte reporte = new Reporte();
-                        CuotaDAL cuotaDAL = new CuotaDAL();
+                        //CuotaDAL cuotaDAL = new CuotaDAL();
                         reporte.Lapso = Convert.ToString(dt.Rows[i]["Lapso"]);
                         reporte.Fullnombre = Convert.ToString(dt.Rows[i]["Fullnombre"]);
                         reporte.Identificador = Convert.ToString(dt.Rows[i]["Identificador"]);
                         reporte.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
                         reporte.Email = Convert.ToString(dt.Rows[i]["Email"]);
                         reporte.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);
-                        reporte.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
-                        reporte.Dolar = reporte.Cuota.Contains("SAIA") ? cuotaDAL.SingleCuota(1, Lapso) : cuotaDAL.SingleCuota(2, Lapso);
+                        //reporte.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
+                        //reporte.Dolar = reporte.Cuota.Contains("SAIA") ? cuotaDAL.SingleCuota(1, Lapso) : cuotaDAL.SingleCuota(2, Lapso);
                         reporte.Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]);
-                        reporte.MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]);
-                        reporte.Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100;
+                        reporte.Carrera = Convert.ToString(dt.Rows[i]["Nivel"]);
+                        reporte.Secciones = Convert.ToString(dt.Rows[i]["Secciones"]);
+                        //reporte.MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]);
+                        //reporte.Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100;
                         reporteList.Add(reporte);
                     }
                 }
             }
             return reporteList;
         }
+
+        public List<Reporte> GetReporteDeudasPorConceptos(string Lapso, int IdArancel, byte Pagada = 0)
+        {
+            Parametros.Clear();
+            Parametros.Add("@Lapso", Lapso);
+            Parametros.Add("@Arancel", IdArancel);
+            Parametros.Add("@Pagada", Pagada);
+
+            List<Reporte> reporteList = new List<Reporte>();
+            dt = dbCon.Procedure("AMIGO_PUERTA", "ListadoDeudasPorConceptos", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Reporte reporte = new Reporte();
+                        //CuotaDAL cuotaDAL = new CuotaDAL();
+                        reporte.Lapso = Convert.ToString(dt.Rows[i]["Lapso"]);
+                        reporte.Fullnombre = Convert.ToString(dt.Rows[i]["Fullnombre"]);
+                        reporte.Identificador = Convert.ToString(dt.Rows[i]["Identificador"]);
+                        reporte.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
+                        reporte.Email = Convert.ToString(dt.Rows[i]["Email"]);
+                        //reporte.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);
+                        //reporte.Cuota = Convert.ToString(dt.Rows[i]["Cuota"]);
+                        //reporte.Dolar = reporte.Cuota.Contains("SAIA") ? cuotaDAL.SingleCuota(1, Lapso) : cuotaDAL.SingleCuota(2, Lapso);
+                        reporte.Monto = Convert.ToDecimal(dt.Rows[i]["Monto"]);
+                        reporte.Carrera = Convert.ToString(dt.Rows[i]["Nivel"]);
+                        reporte.Concepto = Convert.ToString(dt.Rows[i]["Concepto"]);
+                        //reporte.Secciones = Convert.ToString(dt.Rows[i]["Secciones"]);
+                        //reporte.MontoFacturas = Convert.ToDecimal(dt.Rows[i]["MontoFacturas"]);
+                        //reporte.Total = Math.Floor(Convert.ToDecimal(dt.Rows[i]["Total"]) * 100) / 100;
+                        reporteList.Add(reporte);
+                    }
+                }
+            }
+            return reporteList;
+        }
+
         public List<Reporte> GetReportePagadas(string Lapso)
         {
             Parametros.Clear();

@@ -32,9 +32,10 @@ namespace PSMApiRest.DAL
             return dbCon.ErrorEstatus;
         }
 
-        public bool GetTercero(string Identificador)
+        public bool GetTercero(bool Puerta, string Identificador)
         {
             Parametros.Clear();
+            Parametros.Add("@Puerta", Puerta ? 1 : 0);
             Parametros.Add("@Identificador", Identificador);
             dt = dbCon.Procedure("AMIGO", "TercerosSysSelect", Parametros);
             int existe = 0;

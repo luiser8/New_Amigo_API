@@ -35,10 +35,10 @@ namespace PSMApiRest.Controllers
                 try
                 {
                     var respuesta = deudaDAL.GetDeuda(deudaPayload.Puerta, deudaPayload.Lapso, deudaPayload.Identificador);
-                    var respuestaTipo = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).ToList();
+                    var respuestaTipo = inscripcionesDAL.GetIdInscripcion(deudaPayload.Puerta, deudaPayload.Lapso, deudaPayload.Identificador).ToList();
                     string planDePago = respuestaTipo.Count >= 1 ? respuestaTipo.FirstOrDefault().PlanDePago : "No encontrado";
-                    bool esBecado = inscripcionesDAL.GetIdInscripcion(deudaPayload.Lapso, deudaPayload.Identificador).Where(x => x.PlanDePago.Contains("BECA")).Count() >= 1;
-                    bool existe = tercerosDAL.GetTercero(deudaPayload.Identificador);
+                    bool esBecado = inscripcionesDAL.GetIdInscripcion(deudaPayload.Puerta, deudaPayload.Lapso, deudaPayload.Identificador).Where(x => x.PlanDePago.Contains("BECA")).Count() >= 1;
+                    bool existe = tercerosDAL.GetTercero(deudaPayload.Puerta, deudaPayload.Identificador);
                     string estadoAcademico = alumnoDAL.GetAlumnoEstAca(deudaPayload.Identificador);
                     string lapsoIngreso = alumnoDAL.GetAlumnoLapIng(deudaPayload.Identificador);
 

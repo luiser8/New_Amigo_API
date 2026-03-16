@@ -53,9 +53,10 @@ namespace PSMApiRest.DAL
             return InscripcionesList;
         }
 
-        public List<Inscripciones> GetIdInscripcion(string Lapso, string Identificador)
+        public List<Inscripciones> GetIdInscripcion(bool Puerta, string Lapso, string Identificador)
         {
             Parametros.Clear();
+            Parametros.Add("@Puerta", Puerta ? 1 : 0);
             Parametros.Add("@Lapso", Lapso);
             Parametros.Add("@Identificador", Identificador);
 
@@ -72,10 +73,10 @@ namespace PSMApiRest.DAL
                         inscripciones.Id_Terceros = Convert.ToInt32(dt.Rows[i]["Id_Terceros"]);
                         inscripciones.Id_Inscripcion = Convert.ToInt32(dt.Rows[i]["Id_Inscripcion"]);
                         inscripciones.Id_Plan = Convert.ToInt32(dt.Rows[i]["Id_Plan"]);
-                        inscripciones.Id_TipoIngreso = Convert.ToInt32(dt.Rows[i]["Id_TipoIngreso"]);
+                       //inscripciones.Id_TipoIngreso = Convert.ToInt32(dt.Rows[i]["Id_TipoIngreso"]);
                         inscripciones.Id_Carrera = Convert.ToInt32(dt.Rows[i]["Id_Carrera"]);
                         inscripciones.PlanDePago = Convert.ToString(dt.Rows[i]["PlanDePago"]);
-                        inscripciones.TipoIngreso = Convert.ToString(dt.Rows[i]["TipoIngreso"]);
+                        //inscripciones.TipoIngreso = Convert.ToString(dt.Rows[i]["TipoIngreso"]);
                         inscripciones.Telefonos = Convert.ToString(dt.Rows[i]["Telefonos"]);
                         inscripciones.Emails = Convert.ToString(dt.Rows[i]["EMail"]);
                         inscripciones.Fecha = Convert.ToDateTime(dt.Rows[i]["Fecha"]);

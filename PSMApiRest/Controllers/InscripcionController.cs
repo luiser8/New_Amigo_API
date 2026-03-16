@@ -16,6 +16,7 @@ namespace PSMApiRest.Controllers
         /// </summary>
         /// <param name="Identificador"></param>
         /// <param name="Lapso"></param>
+        /// <param name="Puerta"></param>
         /// <returns> 
         ///     Retorna un objeto JSON
         /// </returns>
@@ -23,12 +24,12 @@ namespace PSMApiRest.Controllers
         /// <response code="400">Retorno de null si no hay registros</response> 
         // GET: api/inscripcion/get
         [Route("get")]
-        public IHttpActionResult GetInscripcion(string Identificador, string Lapso)
+        public IHttpActionResult GetInscripcion(string Identificador, string Lapso, bool Puerta)
         {
             try
             {
                 FacturaDAL facturaDAL = new FacturaDAL();
-                var inscripcion = inscripcionesDAL.GetIdInscripcion(Lapso, Identificador).ToArray();
+                var inscripcion = inscripcionesDAL.GetIdInscripcion(Puerta, Lapso, Identificador).ToArray();
                 foreach (var item in inscripcion)
                 {
                     item.Factura = facturaDAL.GetFactura(item.Id_Inscripcion).ToArray();

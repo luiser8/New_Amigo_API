@@ -38,5 +38,32 @@ namespace PSMApiRest.Controllers
             }
             return StatusCode(HttpStatusCode.NoContent);
         }
+
+        /// <summary>
+        /// Indicamos parametros para obtener lista de Aranceles por lapso
+        /// </summary>
+        /// <param name="Lapso"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // GET: api/aranceles
+        //[Route("por_lapso")]
+        public IHttpActionResult GetAranceles([FromUri] string Lapso)
+        {
+            if (Lapso != null)
+            {
+                try
+                {
+                    return Ok(arancelDAL.GetAranceles(Lapso).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return (IHttpActionResult)Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                }
+            }
+            return StatusCode(HttpStatusCode.NoContent);
+        }
     }
 }

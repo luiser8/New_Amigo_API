@@ -45,5 +45,30 @@ namespace PSMApiRest.DAL
             }
             return ArancelList;
         }
+
+        public List<Arancel> GetAranceles(string Lapso)
+        {
+            Parametros.Clear();
+            Parametros.Add("@Lapso", Lapso);
+
+            List<Arancel> ArancelList = new List<Arancel>();
+            dt = dbCon.Procedure("AMIGO_PUERTA", "ListadoAranceles", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        Arancel arancel = new Arancel();
+                        arancel.Id_Arancel = Convert.ToInt32(dt.Rows[i]["Id_Arancel"]);
+                        arancel.Descripcion = Convert.ToString(dt.Rows[i]["Descripcion"]);
+                        arancel.Detalle = Convert.ToString(dt.Rows[i]["Detalle"]);
+                        ArancelList.Add(arancel);
+                    }
+                }
+            }
+            return ArancelList;
+        }
     }
 }

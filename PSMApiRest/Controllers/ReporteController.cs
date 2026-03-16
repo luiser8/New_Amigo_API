@@ -33,21 +33,20 @@ namespace PSMApiRest.Controllers
         public HttpResponseMessage GetReporteDeudas([FromUri] string Lapso, byte Pagada)
         {
             DataTable dt = new DataTable("Cuentas");
-            dt.Columns.AddRange(new DataColumn[10] { new DataColumn("Lapso", typeof(string)),
+            dt.Columns.AddRange(new DataColumn[9] { new DataColumn("Lapso", typeof(string)),
                                             new DataColumn("Identificador", typeof(long)),
                                             new DataColumn("FullNombres", typeof(string)),
                                             new DataColumn("Telefonos", typeof(string)),
                                             new DataColumn("Email", typeof(string)),
                                             new DataColumn("Descripcion", typeof(string)),
-                                            new DataColumn("Cuota", typeof(string)),
-                                            new DataColumn("Dolar", typeof(decimal)),
-                                            new DataColumn("Monto", typeof(decimal)),
-                                            new DataColumn("Total", typeof(decimal))
+                                            new DataColumn("Carrera", typeof(string)),
+                                            new DataColumn("Secciones", typeof(string)),
+                                            new DataColumn("Monto", typeof(decimal))
             });
 
             foreach (var reporte in reporteDAL.GetReporteDeudas(Lapso, Pagada))
             {
-               dt.Rows.Add(reporte.Lapso, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Email, reporte.Descripcion, reporte.Cuota, reporte.Dolar, reporte.Monto, reporte.Total);
+               dt.Rows.Add(reporte.Lapso, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Email, reporte.Descripcion, reporte.Carrera, reporte.Secciones, reporte.Monto);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -65,6 +64,59 @@ namespace PSMApiRest.Controllers
                     result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                     {
                         FileName = "reporte deudas" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
+                    };
+                    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    return result;
+                }
+            }
+        }
+        /// <summary>
+        /// Indicamos parametros para obtener reporte de deudas por conceptos
+        /// </summary>
+        /// <param name="Lapso"></param>
+        /// <param name="Pagada"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // GET: api/reporte/por_conceptos
+        [HttpGet]
+        [Route("por_conceptos")]
+        public HttpResponseMessage GetReporteDeudasPorConceptos([FromUri] string Lapso, int IdArancel, byte Pagada)
+        {
+            DataTable dt = new DataTable("Deudas Por Conceptos");
+            dt.Columns.AddRange(new DataColumn[8] { new DataColumn("Lapso", typeof(string)),
+                                            new DataColumn("Identificador", typeof(long)),
+                                            new DataColumn("FullNombres", typeof(string)),
+                                            new DataColumn("Telefonos", typeof(string)),
+                                            new DataColumn("Email", typeof(string)),
+                                           // new DataColumn("Descripcion", typeof(string)),
+                                            new DataColumn("Carrera", typeof(string)),
+                                            new DataColumn("Concepto", typeof(string)),
+                                            new DataColumn("Monto", typeof(decimal))
+            });
+
+            foreach (var reporte in reporteDAL.GetReporteDeudasPorConceptos(Lapso, IdArancel, Pagada))
+            {
+                dt.Rows.Add(reporte.Lapso, reporte.Identificador, reporte.Fullnombre, reporte.Telefonos, reporte.Email, reporte.Carrera, reporte.Concepto, reporte.Monto);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    var wwb = wb.Worksheets.Add(dt);
+                    wwb.Columns().AdjustToContents();
+                    wb.SaveAs(stream);
+
+                    HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                    result.Content = new ByteArrayContent(stream.GetBuffer());
+                    result.Content.Headers.ContentLength = stream.Length;
+                    result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "reporte deudas por conceptos" + "_" + DateTime.Now.ToShortDateString() + ".xlsx"
                     };
                     result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                     return result;

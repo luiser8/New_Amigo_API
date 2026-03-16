@@ -19,9 +19,10 @@ namespace PSMApiRest.DAL
             dbCon = new DB();
             Parametros = new Hashtable();
         }
-        public List<Lapsos> GetLapsos()
+        public List<Lapsos> GetLapsos(int puerta)
         {
             Parametros.Clear();
+            Parametros.Add("@Puerta", 1);
 
             List<Lapsos> LapsosList = new List<Lapsos>();
             dt = dbCon.Procedure("AMIGO", "LapsosSys", Parametros);

@@ -15,7 +15,7 @@
     <AssemblyName>PSMApiRest</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44311</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
@@ -184,6 +184,7 @@
     <Compile Include="Controllers\BancosController.cs" />
     <Compile Include="Controllers\CuotasController.cs" />
     <Compile Include="Controllers\DeudasController.cs" />
+    <Compile Include="Controllers\FacturacionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InscripcionController.cs" />
     <Compile Include="Controllers\LapsosController.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Models\CuotasInsertadas.cs" />
     <Compile Include="Models\Deuda.cs" />
     <Compile Include="Models\Factura.cs" />
+    <Compile Include="Models\FacturaEstudiante.cs" />
     <Compile Include="Models\Inscripciones.cs" />
     <Compile Include="Lib\InsertarCuotasNuevas.cs" />
     <Compile Include="Models\Lapsos.cs" />
@@ -310,6 +312,7 @@
     <Folder Include="Views\Bancos\" />
     <Folder Include="Views\CentrosDeCosto\" />
     <Folder Include="Views\Conciliaciones\" />
+    <Folder Include="Views\Facturacion\" />
     <Folder Include="Views\Monedas\" />
     <Folder Include="Views\PeriodosContables\" />
     <Folder Include="Views\PlanCuentas\" />
@@ -359,7 +362,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56951</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56951/</IISUrl>
+          <IISUrl>http://localhost/PSMApiRest</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

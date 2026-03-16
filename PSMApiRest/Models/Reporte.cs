@@ -15,6 +15,9 @@ namespace PSMApiRest.Models
         public decimal Dolar { get; set; }
         public decimal Monto { get; set; }
         public decimal MontoFacturas { get; set; }
+        public string Carrera { get; set; }
+        public string Secciones { get; set; }
+        public string Concepto { get; set; }
         public decimal Total { get; set; }
         public DateTime Fecha { get; set; }
     }
