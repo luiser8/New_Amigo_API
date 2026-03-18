@@ -19,9 +19,10 @@ namespace PSMApiRest.DAL
             dbCon = new DB();
             Parametros = new Hashtable();
         }
-        public List<Bancos> GetBancos()
+        public List<Bancos> GetBancos(int id_factura)
         {
             Parametros.Clear();
+            Parametros.Add("@IdFactura", id_factura);
 
             List<Bancos> bancosList = new List<Bancos>();
             dt = dbCon.Procedure("AMIGO_PUERTA", "ListadoBancos", Parametros);

@@ -56,6 +56,27 @@ namespace PSMApiRest.Controllers
         }
         /// <summary>
         /// </summary>
+        /// <param name="saldoAFavorDto"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // PUT: api/facturacion/update_saldo_favor
+        [Route("update_saldo_favor")]
+        public IHttpActionResult EditSaldoFavor(SaldoAFavorDto saldoAFavorDto)
+        {
+            try
+            {
+                return Ok(facturaDAL.UpdateSaldoAFavor(saldoAFavorDto));
+            }
+            catch (Exception ex)
+            {
+                return (IHttpActionResult)Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+        /// <summary>
+        /// </summary>
         /// <param name="depositoDto"></param>
         /// <returns> 
         ///     Retorna un objeto JSON
@@ -69,6 +90,27 @@ namespace PSMApiRest.Controllers
             try
             {
                 return Ok(facturaDAL.InsertDeposito(depositoDto));
+            }
+            catch (Exception ex)
+            {
+                return (IHttpActionResult)Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+        /// <summary>
+        /// </summary>
+        /// <param name="depositoDto"></param>
+        /// <returns> 
+        ///     Retorna un objeto JSON
+        /// </returns>
+        /// <response code="200">Retorno del registro</response>
+        /// <response code="400">Retorno de null si no hay registros</response> 
+        // PUT: api/facturacion/update_deposito
+        [Route("update_deposito")]
+        public IHttpActionResult UpdateDeposito(DepositoDto depositoDto)
+        {
+            try
+            {
+                return Ok(facturaDAL.UpdateDeposito(depositoDto));
             }
             catch (Exception ex)
             {

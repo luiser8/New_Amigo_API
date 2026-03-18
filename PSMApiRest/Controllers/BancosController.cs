@@ -19,13 +19,13 @@ namespace PSMApiRest.Controllers
         /// </returns>
         /// <response code="200">Retorno del registro</response>
         /// <response code="400">Retorno de null si no hay registros</response> 
-        // GET: api/bancos/all
-        [Route("all")]
-        public IHttpActionResult GetBancos()
+        // GET: api/bancos/by_factura
+        [Route("by_factura")]
+        public IHttpActionResult GetBancos(int id_factura)
         {
             try
             {
-                return Ok(bancosDAL.GetBancos());
+                return Ok(bancosDAL.GetBancos(id_factura));
             }
             catch (Exception ex)
             {

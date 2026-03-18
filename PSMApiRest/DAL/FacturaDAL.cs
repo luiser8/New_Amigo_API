@@ -145,6 +145,31 @@ namespace PSMApiRest.DAL
 
             return result;
         }
+        public int UpdateSaldoAFavor(SaldoAFavorDto saldoAFavorDto)
+        {
+            Parametros.Clear();
+            Parametros.Add("@IdMonto", saldoAFavorDto.Id_Monto);
+            Parametros.Add("@IdFactura", saldoAFavorDto.Id_Factura);
+            Parametros.Add("@Cedula", saldoAFavorDto.Cedula);
+            Parametros.Add("@Monto", Math.Round(saldoAFavorDto.Monto, 2));
+
+            var result = 0;
+
+            dt = dbCon.Procedure("AMIGO_PUERTA", "SaldoAFavorEdit", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        result = Convert.ToInt32(dt.Rows[i]["Id_Monto"]);
+                    }
+                }
+            }
+
+            return result;
+        }
         public bool InsertDeposito(DepositoDto depositoDto)
         {
             var result = false;
@@ -168,15 +193,37 @@ namespace PSMApiRest.DAL
             }
             return result;
         }
+        public int UpdateDeposito(DepositoDto depositoDto)
+        {
+            Parametros.Clear();
+            Parametros.Add("@IdDeposito", depositoDto.Id_Deposito);
+            Parametros.Add("@IdFactura", depositoDto.Id_Factura);
+            Parametros.Add("@IdBanco", depositoDto.Id_Banco);
+            Parametros.Add("@Referencia", depositoDto.Referencia);
+            Parametros.Add("@Monto", Math.Round(depositoDto.Monto, 2));
+            Parametros.Add("@Fecha", depositoDto.Fecha);
+            Parametros.Add("@Tipo", depositoDto.Tipo);
 
+            var result = 0;
+
+            dt = dbCon.Procedure("AMIGO_PUERTA", "DepositoEdit", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        result = Convert.ToInt32(dt.Rows[i]["Id_Deposito"]);
+                    }
+                }
+            }
+
+            return result;
+        }
         private List<DepositosArray> DeserializarDepositos(DataRow row)
         {
             var jsonString = row["DepositosArray"]?.ToString();
-
-            // 🔴 DEPURACIÓN: Ver qué JSON está llegando
-            System.Diagnostics.Debug.WriteLine("========== JSON RECIBIDO ==========");
-            System.Diagnostics.Debug.WriteLine(jsonString);
-            System.Diagnostics.Debug.WriteLine("===================================");
 
             if (string.IsNullOrEmpty(jsonString) || jsonString == "[]")
                 return new List<DepositosArray>();
@@ -185,10 +232,6 @@ namespace PSMApiRest.DAL
             {
                 // Limpiar el JSON si es necesario
                 jsonString = System.Text.RegularExpressions.Regex.Replace(jsonString, @"\s+", " ");
-
-                // 🔴 Ver JSON después de limpiar
-                System.Diagnostics.Debug.WriteLine("JSON después de limpiar:");
-                System.Diagnostics.Debug.WriteLine(jsonString);
 
                 var settings = new JsonSerializerSettings
                 {
@@ -200,10 +243,6 @@ namespace PSMApiRest.DAL
             }
             catch (JsonException ex)
             {
-                // Log del error
-                Console.WriteLine($"Error deserializando JSON: {ex.Message}");
-                Console.WriteLine($"JSON original: {jsonString}");
-
                 // 🔴 Intentar una solución más directa
                 try
                 {
