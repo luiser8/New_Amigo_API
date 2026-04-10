@@ -241,7 +241,7 @@ namespace PSMApiRest.DAL
 
                 return JsonConvert.DeserializeObject<List<DepositosArray>>(jsonString, settings);
             }
-            catch (JsonException ex)
+            catch (JsonException _)
             {
                 // 🔴 Intentar una solución más directa
                 try

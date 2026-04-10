@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PSMApiRest.Lib;
+using PSMApiRest.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using PSMApiRest.Lib;
-using PSMApiRest.Models;
+using System.Globalization;
+using System.Linq;
 
 namespace PSMApiRest.DAL
 {
@@ -319,6 +323,209 @@ namespace PSMApiRest.DAL
                 }
             }
             return reporteList;
+        }
+        public List<ReporteFacturacionDepositos> GetReporteFacturacionPorDepositos(string FechaDesde, string FechaHasta, int IdBanco)
+        {
+            Parametros.Clear();
+            Parametros.Add("@FechaDesde", FechaDesde);
+            Parametros.Add("@FechaHasta", FechaHasta);
+            Parametros.Add("@Banco", IdBanco);
+
+            List<ReporteFacturacionDepositos> reporteList = new List<ReporteFacturacionDepositos>();
+            dt = dbCon.Procedure("AMIGO_PUERTA", "ReporteFacturacionDepositos", Parametros);
+
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        ReporteFacturacionDepositos reporte = new ReporteFacturacionDepositos
+                        {
+                            IdFactura = Convert.ToInt32(dt.Rows[i]["Id_Factura"]),
+                            DocumentosPago = DeserializarDepositos(dt.Rows[i]),
+                            Identificador = Convert.ToString(dt.Rows[i]["Identificador"]),
+                            Fullnombre = Convert.ToString(dt.Rows[i]["ApellidosYNombres"]),
+                            ConceptosPago = DeserializarConceptos(dt.Rows[i]),
+                            MontoTotal = Convert.ToDecimal(dt.Rows[i]["MontoTotal"]),
+                        };
+                        reporteList.Add(reporte);
+                    }
+                }
+            }
+            return reporteList;
+        }
+        public CierreCajaTotalResponse GetReporteCierreCaja(string FechaDesde, string FechaHasta)
+        {
+            var response = new CierreCajaTotalResponse
+            {
+                Datos = new List<CierreCajaResponse>(),
+                Fechas = new List<string>(),
+                FechaDesde = DateTime.Parse(FechaDesde),
+                FechaHasta = DateTime.Parse(FechaHasta)
+            };
+
+            Parametros.Clear();
+            Parametros.Add("@FechaDesde", FechaDesde);
+            Parametros.Add("@FechaHasta", FechaHasta);
+
+            dt = dbCon.Procedure("AMIGO_PUERTA", "ReporteFacturacionCierre", Parametros);
+
+            if (dbCon.ErrorEstatus && dt.Rows.Count > 0)
+            {
+                // Obtener las columnas de fechas y ordenarlas de menor a mayor
+                var fechasColumns = new List<string>();
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (col.ColumnName != "Banco" && col.ColumnName != "TotalPorBanco")
+                    {
+                        fechasColumns.Add(col.ColumnName);
+                    }
+                }
+
+                // Ordenar las fechas de menor a mayor
+                response.Fechas = fechasColumns
+                    .Select(f => DateTime.ParseExact(f, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                    .OrderBy(d => d)
+                    .Select(d => d.ToString("dd/MM/yyyy"))
+                    .ToList();
+
+                // Procesar cada fila
+                foreach (DataRow row in dt.Rows)
+                {
+                    var reporte = new CierreCajaResponse
+                    {
+                        Banco = row["Banco"].ToString(),
+                        DepositosPorFecha = new Dictionary<string, decimal>(),
+                        TotalPorBanco = row["TotalPorBanco"] != DBNull.Value ? Convert.ToDecimal(row["TotalPorBanco"]) : 0
+                    };
+
+                    // Cargar los montos por fecha usando las fechas ordenadas
+                    foreach (string fecha in response.Fechas)
+                    {
+                        decimal monto = row[fecha] != DBNull.Value ? Convert.ToDecimal(row[fecha]) : 0;
+                        reporte.DepositosPorFecha.Add(fecha, monto);
+                    }
+
+                    response.Datos.Add(reporte);
+                }
+
+                // Calcular el total general (excluyendo la fila TOTAL si existe)
+                var filasSinTotal = response.Datos.Where(d => d.Banco != "TOTAL").ToList();
+                response.TotalGeneral = filasSinTotal.Sum(d => d.TotalPorBanco);
+            }
+
+            return response;
+        }
+        private List<ConceptosPago> DeserializarConceptos(DataRow row)
+        {
+            var jsonString = row["ConceptosPago"]?.ToString();
+
+            if (string.IsNullOrEmpty(jsonString) || jsonString == "[]")
+                return new List<ConceptosPago>();
+
+            try
+            {
+                // Limpiar el JSON si es necesario
+                jsonString = System.Text.RegularExpressions.Regex.Replace(jsonString, @"\s+", " ");
+
+                var settings = new JsonSerializerSettings
+                {
+                    DateFormatString = "yyyy-MM-dd",
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
+                return JsonConvert.DeserializeObject<List<ConceptosPago>>(jsonString, settings);
+            }
+            catch (JsonException _)
+            {
+                // 🔴 Intentar una solución más directa
+                try
+                {
+                    // Si el JSON viene como objeto en lugar de array
+                    if (jsonString.Trim().StartsWith("{"))
+                    {
+                        var singleObject = JsonConvert.DeserializeObject<ConceptosPago>(jsonString);
+                        return new List<ConceptosPago> { singleObject };
+                    }
+
+                    // Intentar reparar el JSON común de SQL Server 2014
+                    jsonString = jsonString
+                        .Replace("\"{", "{")
+                        .Replace("}\"", "}")
+                        .Replace("\\\"", "\"");
+
+                    // Quitar comillas dobles extras alrededor del array
+                    if (jsonString.StartsWith("\"[") && jsonString.EndsWith("]\""))
+                    {
+                        jsonString = jsonString.Substring(2, jsonString.Length - 4);
+                    }
+
+                    var jArray = JArray.Parse(jsonString);
+                    return jArray.ToObject<List<ConceptosPago>>();
+                }
+                catch (Exception ex2)
+                {
+                    Console.WriteLine($"Error en fallback: {ex2.Message}");
+                    Console.WriteLine($"JSON problemático: {jsonString}");
+                    return new List<ConceptosPago>();
+                }
+            }
+        }
+        private List<DocumentosPago> DeserializarDepositos(DataRow row)
+        {
+            var jsonString = row["DocumentosPago"]?.ToString();
+
+            if (string.IsNullOrEmpty(jsonString) || jsonString == "[]")
+                return new List<DocumentosPago>();
+
+            try
+            {
+                // Limpiar el JSON si es necesario
+                jsonString = System.Text.RegularExpressions.Regex.Replace(jsonString, @"\s+", " ");
+
+                var settings = new JsonSerializerSettings
+                {
+                    //DateFormatString = "yyyy-MM-dd",
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
+                return JsonConvert.DeserializeObject<List<DocumentosPago>>(jsonString, settings);
+            }
+            catch (JsonException _)
+            {
+                // 🔴 Intentar una solución más directa
+                try
+                {
+                    // Si el JSON viene como objeto en lugar de array
+                    if (jsonString.Trim().StartsWith("{"))
+                    {
+                        var singleObject = JsonConvert.DeserializeObject<DocumentosPago>(jsonString);
+                        return new List<DocumentosPago> { singleObject };
+                    }
+
+                    // Intentar reparar el JSON común de SQL Server 2014
+                    jsonString = jsonString
+                        .Replace("\"{", "{")
+                        .Replace("}\"", "}")
+                        .Replace("\\\"", "\"");
+
+                    // Quitar comillas dobles extras alrededor del array
+                    if (jsonString.StartsWith("\"[") && jsonString.EndsWith("]\""))
+                    {
+                        jsonString = jsonString.Substring(2, jsonString.Length - 4);
+                    }
+
+                    var jArray = JArray.Parse(jsonString);
+                    return jArray.ToObject<List<DocumentosPago>>();
+                }
+                catch (Exception ex2)
+                {
+                    Console.WriteLine($"Error en fallback: {ex2.Message}");
+                    Console.WriteLine($"JSON problemático: {jsonString}");
+                    return new List<DocumentosPago>();
+                }
+            }
         }
     }
 }

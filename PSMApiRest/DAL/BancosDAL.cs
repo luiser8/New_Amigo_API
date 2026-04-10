@@ -19,6 +19,27 @@ namespace PSMApiRest.DAL
             dbCon = new DB();
             Parametros = new Hashtable();
         }
+        public Bancos GetBanco(int id_banco)
+        {
+            Parametros.Clear();
+            Parametros.Add("@IdBanco", id_banco);
+            Bancos banco = null;
+            dt = dbCon.Procedure("AMIGO_PUERTA", "BancoPorId", Parametros);
+            if (dbCon.ErrorEstatus)
+            {
+                if (dt.Rows.Count != 0)
+                {
+                    banco = new Bancos
+                    {
+                        Id_Banco = Convert.ToInt16(dt.Rows[0]["Id_Banco"]),
+                        Id_Cuenta = Convert.ToInt16(dt.Rows[0]["Id_Cuenta"]),
+                        NumeroCuenta = Convert.ToString(dt.Rows[0]["NumeroCuenta"]),
+                        Descripcion = Convert.ToString(dt.Rows[0]["Descripcion"])
+                    };
+                }
+            }
+            return banco;
+        }
         public List<Bancos> GetBancos(int id_factura)
         {
             Parametros.Clear();

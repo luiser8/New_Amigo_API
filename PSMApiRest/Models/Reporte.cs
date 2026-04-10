@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PSMApiRest.Models
 {
@@ -75,6 +76,53 @@ namespace PSMApiRest.Models
         public DateTime FechaRegistroPago { get; set; }
         public string NroReciboCaja { get; set; }
         public int Tipo { get; set; }
+    }
+    public class ReporteFacturacionDepositos
+    {
+        public int IdFactura { get; set; }
+        public List<DocumentosPago> DocumentosPago { get; set; }
+        public string Identificador { get; set; }
+        public string Fullnombre { get; set; }
+        public List<ConceptosPago> ConceptosPago { get; set; }
+        public decimal MontoTotal { get; set; }
+        public decimal? MontoTotalGeneral { get; set; }
 
+    }
+    public class DocumentosPago
+    {
+        public string Referencia { get; set; }
+        public string Fecha { get; set; }
+        public string Tipo { get; set; }
+        public decimal Monto { get; set; }
+        public string Banco { get; set; }
+
+    }
+    public class ConceptosPago
+    {
+        public string Concepto { get; set; }
+        public string Monto { get; set; }
+    }
+
+    public class CierreCajaResponse
+    {
+        public string Banco { get; set; }
+        public Dictionary<string, decimal> DepositosPorFecha { get; set; }
+        public decimal TotalPorBanco { get; set; }
+    }
+
+    public class CierreCajaTotalResponse
+    {
+        public List<CierreCajaResponse> Datos { get; set; }
+        public List<string> Fechas { get; set; }
+        public decimal TotalGeneral { get; set; }
+        public DateTime FechaDesde { get; set; }
+        public DateTime FechaHasta { get; set; }
+    }    /// Modelo para el reporte de cierres de caja
+         /// </summary>
+    public class CierreCajaReporte
+    {
+        public string Banco { get; set; }
+        public Dictionary<string, decimal> DepositosPorFecha { get; set; }
+        public decimal TotalPorBanco { get; set; }
     }
 }
